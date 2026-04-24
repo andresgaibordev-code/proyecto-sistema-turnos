@@ -1,0 +1,51 @@
+<div class="registro-wrapper">
+
+  <header class="logo-section">
+    <h1>PELUQUERÍA</h1>
+    <h1>PUEMBO</h1>
+    <p>BARBERÍA PROFESIONAL</p>
+  </header>
+
+  <main class="form-container">
+    <h2>Bienvenido</h2>
+    <p class="instruccion">Ingresa tu nombre para obtener tu turno</p>
+
+    <div *ngIf="mensajeExito" class="alerta-verde">
+      <span>✅</span> {{ mensajeExito }}
+    </div>
+
+    <div class="input-box">
+      <input type="text" 
+             [(ngModel)]="nombreCliente" 
+             placeholder="Tu nombre aquí..." 
+             (keyup.enter)="solicitarTurno()">
+    </div>
+
+    <button class="btn-solicitar" (click)="solicitarTurno()" [disabled]="cargando">
+      <span *ngIf="!cargando">PEDIR TURNO</span>
+      <span *ngIf="cargando">⏳ PROCESANDO...</span>
+    </button>
+  </main>
+
+  <div class="modal-ticket-overlay" *ngIf="mostrarTicket">
+    <div class="ticket-digital">
+
+
+      <div *ngIf="mensajeExito" class="alerta-verde-interna">
+       {{ mensajeExito }}
+    </div>
+    
+      <div class="ticket-top">¡LISTO!</div>
+      
+      <div class="ticket-content">
+        <p class="ticket-saludo">Hola, <span>{{ turnoAsignado?.nombre_cliente }}</span></p>
+        <p class="ticket-label">TU NÚMERO ES EL</p>
+        <div class="ticket-numero">#{{ turnoAsignado?.numero_turno }}</div>
+        <p class="ticket-footer">Espera a ser llamado en la pantalla.</p>
+      </div>
+
+      <button class="btn-cerrar-ticket" (click)="cerrarTicket()">ENTENDIDO</button>
+    </div>
+  </div>
+
+</div>

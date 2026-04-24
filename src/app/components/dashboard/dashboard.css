@@ -1,0 +1,275 @@
+:root {
+  --gold: #a67c52;
+  --dark-bg: #0a0a0a;
+  --card-bg: #1a1a1a;
+  --danger: #dc2626;
+  --success: #22c55e;
+  --text: #f8f5f2;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ux-header {
+  margin-top: 45px; 
+}
+.ux-panel-container {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto;
+  background-color: var(--dark-bg);
+  min-height: 100vh;
+  color: var(--text);
+  padding: 20px;
+}
+
+.ux-header h1 {
+  color: var(--gold);
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+.ux-header p {
+  text-align: center;
+  color: #888;
+  margin-bottom: 25px;
+}
+
+
+.btn-logout {
+  position: absolute;
+  top: 10px;
+  right: 1px;
+ 
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-logout:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+
+
+.card-sillas {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  border: 1px solid #333;
+  margin-bottom: 25px;
+}
+
+.titulo-sillas {
+  color: var(--gold);
+  font-weight: bold;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.grid-sillas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.silla-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  border: none;
+  background: #333;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.silla-activa {
+  background: var(--gold);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(166, 124, 82, 0.5);
+}
+
+.silla-ocupada {
+  background: #000;
+  border: 2px solid var(--danger);
+  opacity: 0.5;
+}
+
+.btn-terminar {
+  width: 100%;
+  background: var(--danger);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+.ux-action-zone {
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 25px 20px;
+  text-align: center;
+  border-left: 4px solid var(--gold);
+}
+
+.ux-next-info span {
+  color: #888;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.ux-next-info h2 {
+  font-size: 2.2rem;
+  margin: 10px 0;
+  color: white;
+}
+
+.ux-btn-llamar {
+  width: 100%;
+  background: var(--success);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: 1.2rem;
+  margin-top: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+
+.ux-list-zone {
+  margin-top: 30px;
+}
+
+.ux-list-zone h3 {
+  color: var(--gold);
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.ux-list-zone ul {
+  list-style: none;
+  padding: 0;
+}
+
+.ux-list-zone li {
+  background: var(--card-bg);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-left: 2px solid #444;
+}
+
+.ux-btn-cancelar {
+  background: transparent;
+  border: 1px solid #666;
+  color: #aaa;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+
+.ux-danger-zone {
+  margin-top: 40px;
+}
+
+.ux-btn-reset {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--danger);
+  color: var(--danger);
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ================= MODALES ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border: 2px solid var(--gold);
+}
+
+.error-card {
+  border-color: var(--danger);
+}
+
+.modal-icon {
+  font-size: 3.5rem;
+  margin-bottom: 25px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-cancelar {
+  flex: 1;
+  padding: 15px;
+  background: #333;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-confirmar {
+  flex: 1;
+  padding: 15px;
+  background: var(--gold);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}

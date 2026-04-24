@@ -1,0 +1,22 @@
+<div class="login-container">
+    <div class="login-card">
+        <h1>PELUQUERÍA</h1>
+        <h1>PUEMBO
+            <span>ADMINISTRADOR</span>
+        </h1>
+        <p>Ingresa la clave de barbero</p>
+
+        <div class="input-wrapper">
+            <input [type]="verClave ? 'text': 'password'" [(ngModel)]="password" placeholder="Contraseña"
+                (keyup.enter)="acceder()">
+            
+            <button type="button" class="btn-ojo" (click)="verClave = !verClave">
+                <i [class]="verClave ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'" style="color:#a67c52;"></i>
+            </button>
+        </div>
+
+        <button (click)="acceder()">ENTRAR AL PANEL</button>
+
+        <p *ngIf="error" class="error-msg">⚠️ Clave incorrecta, intenta de nuevo.</p>
+    </div>
+</div>

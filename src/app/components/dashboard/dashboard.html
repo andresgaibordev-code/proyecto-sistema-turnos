@@ -1,0 +1,94 @@
+<div class="ux-panel-container" *ngIf="siguientes$ | async as lista">
+
+
+
+
+
+  
+
+  <header class="ux-header">
+    <button class="btn-logout" (click)="cerrarSesion()"> Cerrar Sesión </button>
+    <h1>Control de Turnos</h1>
+    <p>Personas en espera: {{ lista.length }}</p>
+  </header>
+
+
+
+
+  <div class="card-sillas">
+    <p class="titulo-sillas">1. SELECCIONA TU SILLA</p>
+    <div class="grid-sillas">
+      <button *ngFor="let i of [1,2,3,4]" 
+              (click)="seleccionarSilla(i)"
+              [class.silla-activa]="sillaSeleccionada === i"
+              [class.silla-ocupada]="sillasOcupadas.includes(i) && sillaSeleccionada !== i"
+              class="silla-btn">
+        {{ i }}
+      </button>
+    </div>
+
+    <button *ngIf="sillaSeleccionada > 0" class="btn-terminar" (click)="terminarCorteActual()">
+      TERMINAR CORTE (Silla {{ sillaSeleccionada }})
+    </button>
+  </div>
+
+  <main class="ux-action-zone">
+    <ng-container *ngIf="lista.length > 0; else filaVacia">
+      <div class="ux-next-info">
+        <span>Siguiente turno:</span>
+        <h2>{{ lista[0].nombre_cliente }}</h2>
+      </div>
+      <button class="ux-btn-llamar" (click)="confirmarLlamada(lista[0])">
+        LLAMAR SIGUIENTE
+      </button>
+    </ng-container>
+
+    <ng-template #filaVacia>
+      <div class="ux-empty-state">
+        <p>No hay nadie en la fila. ¡Tómate un café!</p>
+      </div>
+    </ng-template>
+  </main>
+
+  <section class="ux-list-zone">
+    <h3>Próximos en espera</h3>
+    <ul>
+      <li *ngFor="let turno of lista | slice:1">
+        <span>#{{ turno.numero_turno }} - {{ turno.nombre_cliente }}</span>
+        <button class="ux-btn-cancelar" (click)="confirmarCancelacion(turno)">Cancelar</button>
+      </li>
+    </ul>
+  </section>
+
+  <footer class="ux-danger-zone">
+    <button class="ux-btn-reset" (click)="confirmarReinicio()">CERRAR JORNADA (Borrar Turnos)</button>
+  </footer>
+
+  <div class="modal-overlay" *ngIf="mostrarConfirmacion">
+    <div class="modal-card">
+      <div class="modal-icon">🔔</div>
+      <h2>¿Confirmar Llamado?</h2>
+      <p>Vas a llamar a <strong>{{turnoAProcesar?.nombre_cliente}}</strong> a la <strong>SILLA {{sillaSeleccionada}}</strong></p>
+      <div class="modal-actions">
+        <button class="btn-cancelar" (click)="mostrarConfirmacion = false">CANCELAR</button>
+        <button class="btn-confirmar" (click)="ejecutarLlamado()">¡LLAMAR AHORA!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="mostrarErrorSilla">
+    <div class="modal-card error-card">
+      <p></p>
+      <div class="modal-icon">⚠️</div>
+      <p></p>
+      <h2 style="color: #dc2626;">¡SILLA OCUPADA!</h2>
+      <p></p>
+      <p>Otro barbero ya está atendiendo un cliente en esta silla.</p>
+      
+      <div class="modal-actions">
+        <button class="btn-cancelar" style="flex: 1;" (click)="mostrarErrorSilla = false">ENTENDIDO</button>
+      </div>
+    </div>
+  </div>
+
+</div>

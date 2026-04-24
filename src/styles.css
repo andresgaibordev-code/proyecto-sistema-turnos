@@ -1,0 +1,38 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+:root {
+  /* Paleta Barber Vintage Pro */
+  --bg-dark: #121212;          /* Negro abismo */
+  --leather-brown: #3e2723;    /* Cuero oscuro */
+  --leather-light: #5c4033;    /* Cuero claro */
+  --gold-accent: #d4af37;      /* Oro metálico real */
+  --gold-dim: #a67c52;         /* Oro viejo/bronce */
+  --text-main: #f8f5f2;        /* Blanco hueso */
+  
+  /* Efectos de cristal */
+  --glass-bg: rgba(92, 64, 51, 0.2);
+  --glass-border: rgba(212, 175, 55, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(circle at 50% 0%, #1f1a18 0%, var(--bg-dark) 80%);
+  color: var(--text-main);
+  font-family: 'Montserrat', sans-serif;
+  overflow: hidden; 
+}
+
+
+@keyframes pulse-gold {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+  70% { box-shadow: 0 0 20px 15px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--leather-brown); border-radius: 10px; }

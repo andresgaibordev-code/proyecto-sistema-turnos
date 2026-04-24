@@ -1,0 +1,71 @@
+.login-container {
+  height: 100vh; background: #0a0a0a;
+  display: flex; justify-content: center; align-items: center; padding: 20px;
+}
+.login-card {
+  background: #1a1a1a; padding: 40px; border-radius: 20px;
+  width: 100%; max-width: 350px; text-align: center; border: 1px solid #333;
+}
+h1 { color: #a67c52; margin-bottom: 10px; font-size: 2rem; display: flex; flex-direction: column;align-items: center;}
+h1 span { color: white; font-weight: 300; margin-left: 15px; display: block; margin-top: 15px;font-size: 1rem; text-align: center;padding-left: 35px;padding-right: 50px}
+p { color: #888; margin-bottom: 20px; }
+
+
+
+
+input {
+  width: 100%; padding: 15px; background: #000; border: 2px solid #333;
+  color: white; border-radius: 10px; margin-bottom: 20px; text-align: center; font-size: 1.2rem;
+}
+
+
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.input-wrapper input {
+    text-align: center;
+  width: 100%; 
+  padding: 15px; 
+  padding-right: 50px; 
+  padding-left: 45px;
+  background: #000; 
+  border: 2px solid #333;
+  color: white; 
+  border-radius: 10px; 
+  text-align: center; 
+  font-size: 1.2rem;
+  margin-bottom: 0; 
+}
+
+.input-wrapper input:focus { 
+  border-color: #a67c52; 
+  outline: none; 
+}
+
+.btn-ojo {
+  position: absolute;
+  right: 15px;     
+  top: 50%;         
+  transform: translateY(-50%); 
+  background: transparent; 
+  border: none; 
+  font-size: 1.3rem; 
+  cursor: pointer;
+  padding: 0;
+  width: auto;       
+  user-select: none; 
+  -webkit-tap-highlight-color: transparent; 
+}
+
+input:focus { border-color: #a67c52; outline: none; }
+button {
+  width: 100%; padding: 15px; background: #a67c52; color: white;
+  border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+}
+.error-msg { color: #dc2626; margin-top: 15px; font-weight: bold; animation: shake 0.2s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }

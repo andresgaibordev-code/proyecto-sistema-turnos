@@ -1,0 +1,15 @@
+<div class="tv-container" *ngIf="turnos$ | async as turnos; else cargando">
+  <h1>Próximos Turnos</h1>
+  
+  <ul *ngIf="turnos.length > 0">
+    <li *ngFor="let turno of turnos; trackBy: trackById">
+      <span class="nombre">#{{ turno.numero_turno}} - {{ turno.nombre_cliente || 'Sin nombre'}}</span>
+    </li>
+  </ul>
+
+  <p *ngIf="turnos.length === 0">No hay nadie en espera.</p>
+</div>
+
+<ng-template #cargando>
+  <p>Conectando con la barbería...</p>
+</ng-template>
