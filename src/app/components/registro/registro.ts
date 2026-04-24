@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupabaseService } from 'src/app/services/supabase';
+
 
 @Component({
   selector: 'app-registro',
@@ -11,7 +12,9 @@ import { SupabaseService } from 'src/app/services/supabase';
   styleUrl: './registro.css',
 })
 export class Registro {
+  private cdr = inject(ChangeDetectorRef);
   private supabaseService = inject(SupabaseService);
+ 
 
   nombreCliente: string = '';
   turnoAsignado: any = null;
@@ -28,6 +31,7 @@ export class Registro {
 
     this.cargando = true;
     this.mensajeExito = null;
+    this.cdr.detectChanges();
 
     try{
    
@@ -40,7 +44,11 @@ export class Registro {
       this.mensajeExito = "¡Turno registrado correctamente Bienvenido.! ";
       this.mostrarTicket = true;
       this.nombreCliente = ''; 
-      setTimeout(() => this.mensajeExito = null, 5000); 
+
+      this.cdr.detectChanges();
+
+
+      setTimeout(() => {this.mensajeExito = null; this.cdr.detectChanges();}, 5000); 
     } else {
 
      alert ("No se pudo obtener el turno. Intenta de nuevo")
@@ -51,16 +59,15 @@ export class Registro {
     alert("Error de conexión con el servidor.");
   } finally {
     this.cargando = false; 
+    this.cdr.detectChanges();
   }
   }
-
-
-
 
 cerrarTicket() {
   this.mostrarTicket = false;
   this.mensajeExito = null; 
   this.turnoAsignado = null;
+  this.cdr.detectChanges();
 }
 }
 

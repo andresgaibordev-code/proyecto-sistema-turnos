@@ -1,55 +1,30 @@
 <div class="tv-dashboard">
   
   <main class="main-zone">
-    
+    <div class="top-info">
+      <div class="clock-box">
+        <span class="date">{{ fechaActual }}</span>
+        <span class="time">{{ horaActual }}</span>
+      </div>
+    </div>
+
     <div class="video-wrapper">
-
-<video id="video" autoplay muted style="width:100%; height: 100%; object-fit: cover;"></video>
-
-
-      <div class="video-overlay"></div> </div>
-
-
+      <video id="video" autoplay muted loop style="width:100%; height: 100%; object-fit: cover;"></video>
+      <div class="video-overlay"></div> 
+    </div>
 
     <div class="ticker-bar pulse-active">
-
-
-
-
-      <div class="ticker-badge">¡ATENDIENDO!</div> 
+      <div class="ticker-badge">
+        <span class="dot-indicator"></span> ATENDIENDO AHORA
+      </div> 
       <div class="ticker-info" *ngIf="turnoActual$ | async as actual">
         <span class="turn-number">#{{actual.numero_turno}}</span>
         <span class="turn-name">{{actual.nombre_cliente}}</span>
       </div>
     </div>
-
-    <div class="chairs-bar" *ngIf="turnosAtendiendo$ | async as activos">
-  
-  <div class="chair-card" *ngFor="let i of [1,2,3,4]" 
-       [class.chair-occupied]="obtenerClienteEnSilla(activos, i)">
-    
-    <div class="chair-icon">SILLA {{i}}</div>
-    
-    <ng-container *ngIf="obtenerClienteEnSilla(activos, i) as cliente; else sillaLibre">
-      <div class="status-occupied">
-        {{ cliente.nombre_cliente }}
-      </div>
-    </ng-container>
-
-    <ng-template #sillaLibre>
-      <div class="status-free">LIBRE</div>
-    </ng-template>
-
-  </div>
-</div>
-
-
-
-
   </main>
 
   <aside class="sidebar-zone">
-    
     <div class="sidebar-header">
       <h2>EN ESPERA</h2>
       <div class="line-deco"></div>
@@ -63,11 +38,13 @@
     </div>
 
     <div class="qr-section">
-      <p class="qr-title">ESCANEA PARA TU TURNO</p>
-      <div class="qr-frame">
-        <qrcode [qrdata]="enlaceRegistro" [width]="180" [colorDark]="'#3e2723'"></qrcode>
+      <div class="qr-card">
+        <p class="qr-title">ESCANEA TU TURNO</p>
+        <div class="qr-frame">
+          <qrcode [qrdata]="enlaceRegistro" [width]="150" [colorDark]="'#000000'"></qrcode>
+        </div>
       </div>
     </div>
-
   </aside>
 
+</div>
