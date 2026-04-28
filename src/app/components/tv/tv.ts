@@ -45,7 +45,7 @@ export class Tv implements OnInit {
     }
   ];
 
-  // 1. ESCUCHA EL CLIC PARA DESBLOQUEAR EL AUDIO
+ 
   @HostListener('document:click')
   desbloquearAudioGlobal(){
     if (!this.audioDesbloqueado){
@@ -60,7 +60,7 @@ export class Tv implements OnInit {
   ngOnInit() {
     this.supabaseService.initTurnos();
     
-    // 2. LÓGICA ÚNICA PARA REPRODUCIR EL SONIDO
+   
     this.turnosAtendiendo$.subscribe(activos => {
       const nuevosIds = activos.map((t: any) => t.id);
       const hayNuevoLlamado = nuevosIds.some((id: any) => !this.idsEnSilla.includes(id));
@@ -72,14 +72,14 @@ export class Tv implements OnInit {
       this.idsEnSilla = nuevosIds;
     });
     
-    // INICIO DEL VIDEO
+    
     setTimeout(() => {
       this.video = document.getElementById('video') as HTMLVideoElement;
       console.log('VIDEO', this.video);
       this.cargarCanal(this.canales[0].url);
     }, 1000);
 
-    // INICIO DEL RELOJ
+    
     this.actualizarReloj();
     setInterval(() => this.actualizarReloj(), 1000);
   }
@@ -108,7 +108,6 @@ export class Tv implements OnInit {
     }
   }
 
-  // 3. LA ÚNICA FUNCIÓN QUE DISPARA EL MP3
   reproducirSonido() {
     if (this.audioDesbloqueado){
       const audio= new Audio('public/ding.mp3');
