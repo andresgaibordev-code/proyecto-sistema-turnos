@@ -30,7 +30,7 @@ export class Tv implements OnInit {
     map(turnos => turnos.filter(t => t.estado === 'esperando').slice(0, 4))
   );
 
-  public enlaceRegistro: string = 'http://192.168.1.53:4200/registro';
+  public enlaceRegistro: string = 'https://29043284.barberia-puembo.pages.dev';
 
   audioDesbloqueado: boolean = false;
   idsEnSilla: number[] = [];
