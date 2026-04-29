@@ -8,8 +8,9 @@ import { Login } from './components/login/login';
 
 
 export const routes: Routes = [
+    {path: '', redirectTo: 'tv', pathMatch: 'full'},
 {path: 'registro' , component: Registro},
-{path: '', redirectTo: 'registro', pathMatch: 'full'},
+
 {path: 'lista' , component: Lista},
 {path:  'tv' , component:   Tv},
 {path:  'dashboard' , component: Dashboard,
