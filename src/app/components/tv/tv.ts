@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, OnInit} from '@angular/core';
 import { CommonModule, WeekDay } from '@angular/common';
 import { SupabaseService } from 'src/app/services/supabase';
-import { map, share, shareReplay } from 'rxjs';
+import { every, map, share, shareReplay } from 'rxjs';
 import { QRCodeComponent } from 'angularx-qrcode';
 import  Hls  from 'hls.js';
 import { distinctUntilChanged } from 'rxjs';
@@ -15,6 +15,7 @@ import { distinctUntilChanged } from 'rxjs';
 })
 export class Tv implements OnInit {
   private supabaseService = inject(SupabaseService);
+  private cd = inject(ChangeDetectorRef);
   private turnosBase$ = this.supabaseService.turnos$.pipe(
 
     shareReplay(1)
@@ -107,9 +108,57 @@ export class Tv implements OnInit {
     }
 
     if(Hls.isSupported()){
-      this.hls = new Hls();
+      this.hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: false,
+     manifestLoadingMaxRetry: 10,
+       manifestLoadingRetryDelay: 1000,
+      levelLoadingMaxRetry: 10,
+      levelLoadingRetryDelay: 1000,
+      fragLoadingMaxRetry: 10,
+      fragLoadingRetryDelay: 1000,
+
+       maxBufferLength: 15,
+      maxMaxBufferLength: 30,
+      });
+
+
+     this.hls.on(Hls.Events.ERROR, (event, data) =>{
+
+if(data.fatal){
+
+switch(data.type){
+case Hls.ErrorTypes.NETWORK_ERROR:
+  console.log('Error de red- reintentado...');
+  this.hls.startLoad();
+  break;
+  case Hls.ErrorTypes.MEDIA_ERROR:
+    console.log('E  rror de media- recuperando...');
+    this.hls.recoverMediaError();
+break;
+
+default:
+  console.log('Error fatal - recargando canal... ');
+  setTimeout(() => this.cargarCanal(url), 3000);
+
+
+}
+
+
+}
+
+
+
+     }   );
+
+
       this.hls.loadSource(url);
       this.hls.attachMedia(this.video);
+
+
+
+
+
     }else{
       this.video.src = url;
     }
