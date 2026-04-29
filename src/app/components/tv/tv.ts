@@ -4,8 +4,6 @@ import { SupabaseService } from 'src/app/services/supabase';
 import { map, shareReplay, distinctUntilChanged } from 'rxjs';
 import { QRCodeComponent } from 'angularx-qrcode';
 
-
-
 @Component({
   selector: 'app-tv',
   standalone: true,
@@ -46,9 +44,13 @@ export class Tv implements OnInit {
   audioDesbloqueado: boolean = false;
   idsEnSilla: number[] = [];
 
-  
   private hls: any = null;
   private video!: HTMLVideoElement;
+
+  // ── Overlay ──
+  mostrarOverlay: boolean = true;  // controla el *ngIf del overlay
+  private streamListo: boolean = false;
+  private urlActual: string = '';
 
   canales = [
     {
@@ -57,11 +59,27 @@ export class Tv implements OnInit {
     }
   ];
 
+  // ── El click en el overlay llama a esto ──
+  iniciarStream() {
+    if (!this.streamListo) return;
+
+    this.video.play()
+      .then(() => {
+        this.mostrarOverlay = false;      // esconde el overlay
+        this.audioDesbloqueado = true;    // desbloquea el audio también
+        this.cd.markForCheck();
+        console.log('Stream reproduciendo ✅');
+      })
+      .catch(e => {
+        console.log('Error al reproducir:', e);
+      });
+  }
+
+  // ── Click en cualquier parte de la página (tu lógica original intacta) ──
   @HostListener('document:click')
   desbloquearAudioGlobal() {
     if (!this.audioDesbloqueado) {
       this.audioDesbloqueado = true;
-      console.log('¡Audio desbloqueado!');
       const audioVacio = new Audio('ding.mp3');
       audioVacio.volume = 0;
       audioVacio.play().catch(() => {});
@@ -71,7 +89,7 @@ export class Tv implements OnInit {
   ngOnInit() {
     this.supabaseService.initTurnos();
 
-    // Detectar nuevo llamado para reproducir sonido
+    // Detectar nuevo turno para reproducir sonido
     this.turnosAtendiendo$.subscribe(activos => {
       const nuevosIds = activos.map((t: any) => t.id);
       const hayNuevoLlamado = nuevosIds.some((id: any) => !this.idsEnSilla.includes(id));
@@ -83,14 +101,14 @@ export class Tv implements OnInit {
       this.idsEnSilla = nuevosIds;
     });
 
-    // Cargar el video 1 segundo después de que el DOM esté listo
+    // Cargar stream al inicio
     setTimeout(() => {
       this.video = document.getElementById('video') as HTMLVideoElement;
       console.log('VIDEO elemento:', this.video);
       this.cargarCanal(this.canales[0].url);
     }, 1000);
 
-    // Reloj — actualiza cada segundo
+    // Reloj
     this.actualizarReloj();
     setInterval(() => {
       this.actualizarReloj();
@@ -108,9 +126,9 @@ export class Tv implements OnInit {
     return activos.find(t => t.silla === numeroSilla);
   }
 
-
   async cargarCanal(url: string) {
-  
+    this.urlActual = url;
+
     const HlsModule = await import('hls.js');
     const Hls = HlsModule.default;
 
@@ -133,7 +151,6 @@ export class Tv implements OnInit {
         maxMaxBufferLength: 30,
       });
 
-      
       this.hls.on(Hls.Events.ERROR, (event: any, data: any) => {
         if (data.fatal) {
           switch (data.type) {
@@ -146,7 +163,7 @@ export class Tv implements OnInit {
               this.hls.recoverMediaError();
               break;
             default:
-              console.log('Error fatal — recargando canal en 3s...');
+              console.log('Error fatal — recargando en 3s...');
               setTimeout(() => this.cargarCanal(url), 3000);
               break;
           }
@@ -156,20 +173,33 @@ export class Tv implements OnInit {
       this.hls.loadSource(url);
       this.hls.attachMedia(this.video);
 
-this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-this.video.play().catch(e =>{
+      // Cuando el stream está listo muestra el overlay para que el usuario toque
+      this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        this.streamListo = true;
+        console.log('Stream listo — esperando toque del usuario');
 
-console.log('Autoplay bloqueado por browser: ', e);
-
-});
-
-
-});
-
+        // Intenta autoplay silencioso por si el browser lo permite
+        this.video.play()
+          .then(() => {
+            // Autoplay funcionó (ej. Chrome) — esconde overlay directamente
+            this.mostrarOverlay = false;
+            this.audioDesbloqueado = true;
+            this.cd.markForCheck();
+            console.log('Autoplay OK ✅');
+          })
+          .catch(() => {
+            // Autoplay bloqueado (ej. Brave) — el overlay ya está visible, el usuario toca
+            console.log('Autoplay bloqueado — mostrando overlay para toque manual');
+            this.cd.markForCheck();
+          });
+      });
 
     } else {
-      
+      // Safari — soporta HLS nativo
       this.video.src = url;
+      this.video.play().catch(() => {
+        console.log('Safari: esperando interacción del usuario');
+      });
     }
   }
 
