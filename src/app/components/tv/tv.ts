@@ -1,36 +1,43 @@
-import { Component, HostListener, inject, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit} from '@angular/core';
 import { CommonModule, WeekDay } from '@angular/common';
 import { SupabaseService } from 'src/app/services/supabase';
-import { map } from 'rxjs';
+import { map, share, shareReplay } from 'rxjs';
 import { QRCodeComponent } from 'angularx-qrcode';
 import  Hls  from 'hls.js';
-
+import { distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-tv',
   standalone: true,
   imports: [CommonModule, QRCodeComponent],
   templateUrl: './tv.html',
   styleUrl: './tv.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Tv implements OnInit {
   private supabaseService = inject(SupabaseService);
-  
+  private turnosBase$ = this.supabaseService.turnos$.pipe(
+
+    shareReplay(1)
+  );
   horaActual: string = '';
   fechaActual: string= '';
   
-  turnoActual$ = this.supabaseService.turnos$.pipe (
-    map(turnos => turnos.find(t => t.estado === 'atendiendo'))
+  turnoActual$ = this.turnosBase$.pipe (
+    map(turnos => turnos.find(t => t.estado === 'atendiendo')),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr) )
   );
 
-  turnosAtendiendo$ = this.supabaseService.turnos$.pipe(
-    map(turnos => turnos.filter(t => t.estado === 'atendiendo'))
+  turnosAtendiendo$ = this.turnosBase$.pipe(
+    map(turnos => turnos.filter(t => t.estado === 'atendiendo')),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
   );
 
-  siguientes$ = this.supabaseService.turnos$.pipe(
-    map(turnos => turnos.filter(t => t.estado === 'esperando').slice(0, 4))
+  siguientes$ = this.turnosBase$.pipe(
+    map(turnos => turnos.filter(t => t.estado === 'esperando').slice(0, 4)),
+    distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr))
   );
 
-  public enlaceRegistro: string = 'https://29043284.barberia-puembo.pages.dev';
+  public enlaceRegistro: string = 'https://29043284.barberia-puembo.pages.dev/registro';
 
   audioDesbloqueado: boolean = false;
   idsEnSilla: number[] = [];
@@ -51,7 +58,7 @@ export class Tv implements OnInit {
     if (!this.audioDesbloqueado){
       this.audioDesbloqueado = true;
       console.log('¡Audio desbloqueado!');
-      const audioVacio = new Audio ('public/ding.mp3');
+      const audioVacio = new Audio ('ding.mp3');
       audioVacio.volume = 0;
       audioVacio.play().catch(() => {} );
     }
@@ -81,7 +88,7 @@ export class Tv implements OnInit {
 
     
     this.actualizarReloj();
-    setInterval(() => this.actualizarReloj(), 1000);
+    setInterval(() => this.actualizarReloj(), 30000);
   }
 
   actualizarReloj(){
@@ -110,7 +117,7 @@ export class Tv implements OnInit {
 
   reproducirSonido() {
     if (this.audioDesbloqueado){
-      const audio= new Audio('public/ding.mp3');
+      const audio= new Audio('ding.mp3');
       audio.volume = 1;
       audio.play().catch(e => console.log('El navegador bloqueó el audio', e ));
     }else{
