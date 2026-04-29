@@ -89,7 +89,10 @@ export class Tv implements OnInit {
 
     
     this.actualizarReloj();
-    setInterval(() => this.actualizarReloj(), 30000);
+    setInterval(() => {
+      this.actualizarReloj(); this.cd.markForCheck();
+    }, 1000);
+    
   }
 
   actualizarReloj(){
