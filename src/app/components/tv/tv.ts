@@ -46,7 +46,7 @@ export class Tv implements OnInit {
   audioDesbloqueado: boolean = false;
   idsEnSilla: number[] = [];
 
-  // ← 'any' porque ya no importamos el tipo Hls arriba
+  
   private hls: any = null;
   private video!: HTMLVideoElement;
 
@@ -108,9 +108,9 @@ export class Tv implements OnInit {
     return activos.find(t => t.silla === numeroSilla);
   }
 
-  // ← async aquí es lo que faltaba para poder usar await adentro
+
   async cargarCanal(url: string) {
-    // Lazy load — HLS solo carga cuando se necesita
+  
     const HlsModule = await import('hls.js');
     const Hls = HlsModule.default;
 
@@ -133,7 +133,7 @@ export class Tv implements OnInit {
         maxMaxBufferLength: 30,
       });
 
-      // Manejo de errores — se recupera solo
+      
       this.hls.on(Hls.Events.ERROR, (event: any, data: any) => {
         if (data.fatal) {
           switch (data.type) {
@@ -156,8 +156,19 @@ export class Tv implements OnInit {
       this.hls.loadSource(url);
       this.hls.attachMedia(this.video);
 
+this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+this.video.play().catch(e =>{
+
+console.log('Autoplay bloqueado por browser: ', e);
+
+});
+
+
+});
+
+
     } else {
-      // Fallback para Safari (soporta HLS nativo)
+      
       this.video.src = url;
     }
   }
