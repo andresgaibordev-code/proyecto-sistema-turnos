@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "deploy": "ng build && npx wrangler pages deploy dist/starq/browser"
   },
   "private": true,
   "packageManager": "npm@11.9.0",
